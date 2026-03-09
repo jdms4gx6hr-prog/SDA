@@ -100,23 +100,23 @@ void search_struct(char word[15],int b , struct Student students[b]){
         printf("No students to search\n");
         return;
     }
-    if (strcmp(word,"name")==0 || strcmp(word,"Name")==0){
+    if (strcasecmp(word,"name")==0){
         for (int i=0;i<b;i++)
             printf("%s\n" , students[i].name);
     }
-    else if (strcmp(word,"group number")==0 || strcmp(word,"Group number")==0) {
+    else if (strcasecmp(word,"group number")==0) {
         for (int i=0;i<b;i++)
             printf("%d\n" , students[i].group_num);
     }
-    else if (strcmp(word,"age")==0 || strcmp(word,"Age")==0 ) {
+    else if (strcasecmp(word,"age")==0) {
         for (int i=0;i<b;i++)
             printf("%d\n" , students[i].age);
     }
-    else if (strcmp(word,"average score")==0 || strcmp(word,"Average score")==0) {
+    else if (strcasecmp(word,"average score")==0) {
         for (int i=0;i<b;i++)
             printf("%.2f\n" , students[i].avg);
     }
-    else if (strcmp(word,"gender")==0 || strcmp(word,"Gender")==0) {
+    else if (strcasecmp(word,"gender")==0) {
         for (int i=0;i<b;i++)
             printf("%s\n" , students[i].gender);
     }
@@ -227,6 +227,75 @@ void free_struct(int b , struct Student students[b]) {
         printf("Successful cleaning\n");
     }
 }
+struct Student* sort_student_increase(int b , struct Student students[b] , char word[50]) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return NULL;
+    }
+    if (b <= 0) {
+        printf("No students to search\n");
+        return students;
+    }
+    if (strcasecmp(word,"name")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (strcmp(students[j].name,students[j+1].name)>0) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+    }
+    else if (strcasecmp(word,"group number")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (students[j].group_num>students[j+1].group_num) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+    }
+    else if (strcasecmp(word,"age")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (students[j].age>students[j+1].age) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+    }
+    else if (strcasecmp(word,"average score")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (students[j].avg>students[j+1].avg) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+    }
+    else if (strcmp(word,"gender")==0) {
+            for (int i=0;i<b-1;i++) {
+                for (int j=0 ;j< b-i-1;j++) {
+                    if (strcmp(students[j].gender,students[j+1].gender)>0) {
+                        struct Student temp =students[j];
+                        students[j] = students[j+1];
+                        students[j+1] = temp;
+                    }
+                }
+            }
+        }
+    else
+        printf("Try again!\n");
+    printf("Successful sort\n");
+    return students;
+}
 int main() {
     int n;
     printf("How many students to add?: ");
@@ -244,7 +313,8 @@ int main() {
                "6.Append student\n"
                "7.Delete last student\n"
                "8.Cleaning memory\n"
-               "9.Exit\n");
+               "9.Sort students in ascending order\n"
+               "10.Exit\n");
         scanf("%d" ,&choice);
         switch (choice){
             case 1: {
@@ -304,8 +374,17 @@ int main() {
                 students = NULL;
                 break;
             }
+            case 9: {
+                char field[50];
+                printf("Enter field for sort:");
+                getchar();
+                fgets(field,50,stdin);
+                field[strcspn(field,"\n")] = '\0';
+                sort_student_increase(n,students,field);
+                break;
+            }
         }
-        if (choice == 9)
+        if (choice == 10)
             break;
 
     }

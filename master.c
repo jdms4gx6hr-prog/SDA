@@ -199,7 +199,6 @@ struct Student* delete_last(int b , struct Student students[b]) {
         return NULL;
     }
     if (b<=0) {
-        free(students);
         printf("No students to delete");
         return students;
     }
@@ -280,7 +279,7 @@ struct Student* sort_student_increase(int b , struct Student students[b] , char 
             }
         }
     }
-    else if (strcmp(word,"gender")==0) {
+    else if (strcasecmp(word,"gender")==0) {
             for (int i=0;i<b-1;i++) {
                 for (int j=0 ;j< b-i-1;j++) {
                     if (strcmp(students[j].gender,students[j+1].gender)>0) {
@@ -293,7 +292,6 @@ struct Student* sort_student_increase(int b , struct Student students[b] , char 
         }
     else
         printf("Try again!\n");
-    free(students);
     printf("Successful sort\n");
     return students;
 
@@ -351,7 +349,7 @@ struct Student* sort_student_decrease(int b , struct Student students[b] , char 
             }
         }
     }
-    else if (strcmp(word,"gender")==0) {
+    else if (strcasecmp(word,"gender")==0) {
             for (int i=0;i<b-1;i++) {
                 for (int j=0 ;j< b-i-1;j++) {
                     if (strcmp(students[j].gender,students[j+1].gender)<0) {
@@ -364,7 +362,6 @@ struct Student* sort_student_decrease(int b , struct Student students[b] , char 
         }
     else
         printf("Try again!\n");
-    free(students);
     printf("Successful sort\n");
     return students;
 }
@@ -404,7 +401,6 @@ struct Student* insert_students(int b , struct Student students[b] , int index )
         temp3[i+1]=students[i];
     }
     printf("Successful insert!\n");
-    free(students);
     return temp3;
 }
 struct Student* delete_student(int b , struct Student students[b] , int index) {
@@ -414,6 +410,10 @@ struct Student* delete_student(int b , struct Student students[b] , int index) {
     }
     if (b <= 0) {
         printf("Array is empty\n");
+        return students;
+    }
+    if (index<0 || index>=b) {
+        printf("Wrong index!\n");
         return students;
     }
     struct Student *temp4 = calloc((b-1) , sizeof(*temp4));
@@ -431,7 +431,6 @@ struct Student* delete_student(int b , struct Student students[b] , int index) {
     free(students);
     return temp4;
 }
-
 int main() {
     int n;
     printf("How many students to add?: ");
@@ -479,6 +478,7 @@ int main() {
                 fgets(field,15,stdin);
                 field[strcspn(field,"\n")]='\0';
                 change_struct(index-1,field,n,students);
+                show_students(n,students);
                 break;
             }
             case 4: {
@@ -495,17 +495,20 @@ int main() {
                 printf("Enter number of students for extending:");
                 scanf("%d" , &new);
                 students = extend_array(new , n , students);
+                show_students(n,students);
                 n += new;
                 break;
             }
             case 6: {
                 students = append_array(n , students);
                 n += 1;
+                show_students(n,students);
                 break;
             }
             case 7: {
                 students = delete_last(n , students);
-                n--;
+                show_students(n,students);
+                n-=1;
                 break;
             }
             case 8: {
@@ -530,7 +533,7 @@ int main() {
                 getchar();
                 fgets(field,50,stdin);
                 field[strcspn(field,"\n")] = '\0';
-                sort_student_increase(n,students,field);
+                sort_student_decrease(n,students,field);
                 printf("\n");
                 show_students(n,students);
                 break;
@@ -540,7 +543,8 @@ int main() {
                 printf("Enter index for inserting:");
                 scanf("%d" , &index);
                 students = insert_students(n,students,index-1);
-                n++;
+                n+=1;
+                show_students(n,students);
                 break;
             }
             case 12: {
@@ -548,7 +552,8 @@ int main() {
                 printf("Enter index to delete:");
                 scanf("%d" , &index1);
                 students = delete_student(n,students,index1-1);
-                n--;
+                n-=1;
+                show_students(n,students);
             }
         }
         if (choice == 13)

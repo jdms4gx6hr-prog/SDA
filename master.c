@@ -384,8 +384,9 @@ struct Student* insert_students(int b , struct Student students[b] , int index )
         printf("Memory allocation is failed\n");
         return students;
     }
-    for (int i=0;i<index;i++)
-            temp3[i]=students[i];
+    for (int i=0;i<index;i++) {
+        temp3[i]=students[i];
+    }
     printf("Name:");
     fgets(temp3[index].name , 50,stdin);
     temp3[index].name[strcspn( temp3[index].name,"\n")] = '\0';
@@ -399,10 +400,36 @@ struct Student* insert_students(int b , struct Student students[b] , int index )
     getchar();
     fgets(temp3[index].gender , 10,stdin);
     temp3[index].gender[strcspn( temp3[index].gender,"\n")] = '\0';
-    for (int i=index;i<b;i++)
+    for (int i=index;i<b;i++) {
         temp3[i+1]=students[i];
+    }
+    printf("Successful insert!\n");
     free(students);
     return temp3;
+}
+struct Student* delete_student(int b , struct Student students[b] , int index) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return NULL;
+    }
+    if (b <= 0) {
+        printf("Array is empty\n");
+        return students;
+    }
+    struct Student *temp4 = calloc((b-1) , sizeof(*temp4));
+    if (temp4==NULL) {
+        printf("Memory allocation is failed!\n");
+        return students;
+    }
+    for (int i=0;i<index;i++) {
+        temp4[i] = students[i];
+    }
+    for (int i=(index+1);i<b;i++) {
+        temp4[i-1] = students[i];
+    }
+    printf("Successful delete!\n");
+    free(students);
+    return temp4;
 }
 
 int main() {
@@ -425,7 +452,8 @@ int main() {
                "9.Sort students in ascending order\n"
                "10.Sort students in descending order\n"
                "11.Insert student\n"
-               "12.Exit\n");
+               "12.Delete student\n"
+               "13.Exit\n");
         scanf("%d" ,&choice);
         switch (choice){
             case 1: {
@@ -515,10 +543,16 @@ int main() {
                 n++;
                 break;
             }
+            case 12: {
+                int index1;
+                printf("Enter index to delete:");
+                scanf("%d" , &index1);
+                students = delete_student(n,students,index1-1);
+                n--;
+            }
         }
-        if (choice == 12)
+        if (choice == 13)
             break;
-
     }
     return 0;
 }

@@ -233,7 +233,7 @@ struct Student* sort_student_increase(int b , struct Student students[b] , char 
         return NULL;
     }
     if (b <= 0) {
-        printf("No students to search\n");
+        printf("Array is empty\n");
         return students;
     }
     if (strcasecmp(word,"name")==0) {
@@ -293,8 +293,10 @@ struct Student* sort_student_increase(int b , struct Student students[b] , char 
         }
     else
         printf("Try again!\n");
+    free(students);
     printf("Successful sort\n");
     return students;
+
 }
 struct Student* sort_student_decrease(int b , struct Student students[b] , char word[50]) {
     if (students == NULL) {
@@ -302,7 +304,7 @@ struct Student* sort_student_decrease(int b , struct Student students[b] , char 
         return NULL;
     }
     if (b <= 0) {
-        printf("No students to search\n");
+        printf("Array is empty\n");
         return students;
     }
     if (strcasecmp(word,"name")==0) {
@@ -362,9 +364,47 @@ struct Student* sort_student_decrease(int b , struct Student students[b] , char 
         }
     else
         printf("Try again!\n");
+    free(students);
     printf("Successful sort\n");
     return students;
 }
+struct Student* insert_students(int b , struct Student students[b] , int index ) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return NULL;
+    }
+    if (b <= 0) {
+        printf("Array is empty\n");
+        return students;
+    }
+    printf("Enter student to add : \n");
+    getchar();
+    struct Student *temp3 = calloc((b+1) , sizeof(*temp3));
+    if (temp3==NULL) {
+        printf("Memory allocation is failed\n");
+        return students;
+    }
+    for (int i=0;i<index;i++)
+            temp3[i]=students[i];
+    printf("Name:");
+    fgets(temp3[index].name , 50,stdin);
+    temp3[index].name[strcspn( temp3[index].name,"\n")] = '\0';
+    printf("Group Number:");
+    scanf("%d" , &temp3[index].group_num);
+    printf("Age:");
+    scanf("%d" , &temp3[index].age);
+    printf("Average score:");
+    scanf("%f" , &temp3[index].avg);
+    printf("Gender:");
+    getchar();
+    fgets(temp3[index].gender , 10,stdin);
+    temp3[index].gender[strcspn( temp3[index].gender,"\n")] = '\0';
+    for (int i=index;i<b;i++)
+        temp3[i+1]=students[i];
+    free(students);
+    return temp3;
+}
+
 int main() {
     int n;
     printf("How many students to add?: ");
@@ -373,7 +413,7 @@ int main() {
     struct Student *students = calloc(n , sizeof(*students));
     while (1) {
         int choice;
-        printf("Choose 1-11 to:\n"
+        printf("Choose 1-13 to:\n"
                "1.Add students\n"
                "2.Show students\n"
                "3.Change\n"
@@ -384,7 +424,8 @@ int main() {
                "8.Cleaning memory\n"
                "9.Sort students in ascending order\n"
                "10.Sort students in descending order\n"
-               "11.Exit\n");
+               "11.Insert student\n"
+               "12.Exit\n");
         scanf("%d" ,&choice);
         switch (choice){
             case 1: {
@@ -466,8 +507,16 @@ int main() {
                 show_students(n,students);
                 break;
             }
+            case 11: {
+                int index;
+                printf("Enter index for inserting:");
+                scanf("%d" , &index);
+                students = insert_students(n,students,index-1);
+                n++;
+                break;
+            }
         }
-        if (choice == 11)
+        if (choice == 12)
             break;
 
     }

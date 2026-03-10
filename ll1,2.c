@@ -91,33 +91,35 @@ void change_struct(int k ,char ch[15], int b , struct Student students[b]) {
     else
         printf("Try again!\n");
 }
-void search_struct(char word[15],int b , struct Student students[b]){
+void search_struct(char word[15],int b , struct Student students[b]) {
     if (students == NULL) {
         printf("Array is NULL\n");
         return;
     }
-    if (b <= 0) {
-        printf("No students to search\n");
-        return;
+        if (strcasecmp(word,"name")==0){
+            for (int i=0;i<b;i++)
+                printf("%s\n" , students[i].name);
+        }
+        else if (strcasecmp(word,"group number")==0) {
+            for (int i=0;i<b;i++)
+                printf("%d\n" , students[i].group_num);
+        }
+        else if (strcasecmp(word,"age")==0) {
+            for (int i=0;i<b;i++)
+                printf("%d\n" , students[i].age);
+        }
+        else if (strcasecmp(word,"average score")==0) {
+            for (int i=0;i<b;i++)
+                printf("%.2f\n" , students[i].avg);
+        }
+        else if (strcasecmp(word,"gender")==0) {
+            for (int i=0;i<b;i++)
+                printf("%s\n" , students[i].gender);
+        }
+        else
+            printf("Try again!\n");
     }
-        for (int i=0;i<b;i++)
-            printf("%s\n" , students[i].name);
-    }
-        for (int i=0;i<b;i++)
-            printf("%d\n" , students[i].group_num);
-    }
-        for (int i=0;i<b;i++)
-            printf("%d\n" , students[i].age);
-    }
-        for (int i=0;i<b;i++)
-            printf("%.2f\n" , students[i].avg);
-    }
-        for (int i=0;i<b;i++)
-            printf("%s\n" , students[i].gender);
-    }
-    else
-        printf("Try again!\n");
-}
+
 struct Student* extend_array(int n , int b , struct Student students[b] ) {
     if (students == NULL) {
         printf("Array is NULL\n");
@@ -238,7 +240,7 @@ int main() {
                "5.Extend students\n"
                "6.Append student\n"
                "7.Delete last student\n"
-               "8.Cleaning memory\n"
+               "8.Cleaning memory\n");
         scanf("%d" ,&choice);
         switch (choice){
             case 1: {

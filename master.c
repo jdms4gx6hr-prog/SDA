@@ -245,6 +245,7 @@ struct Student* sort_student_increase(int b , struct Student students[b] , char 
                 }
             }
         }
+        printf("Successful sort\n");
     }
     else if (strcasecmp(word,"group number")==0) {
         for (int i=0;i<b-1;i++) {
@@ -256,6 +257,7 @@ struct Student* sort_student_increase(int b , struct Student students[b] , char 
                 }
             }
         }
+        printf("Successful sort\n");
     }
     else if (strcasecmp(word,"age")==0) {
         for (int i=0;i<b-1;i++) {
@@ -267,6 +269,7 @@ struct Student* sort_student_increase(int b , struct Student students[b] , char 
                 }
             }
         }
+        printf("Successful sort\n");
     }
     else if (strcasecmp(word,"average score")==0) {
         for (int i=0;i<b-1;i++) {
@@ -278,6 +281,7 @@ struct Student* sort_student_increase(int b , struct Student students[b] , char 
                 }
             }
         }
+        printf("Successful sort\n");
     }
     else if (strcasecmp(word,"gender")==0) {
             for (int i=0;i<b-1;i++) {
@@ -289,10 +293,10 @@ struct Student* sort_student_increase(int b , struct Student students[b] , char 
                     }
                 }
             }
+        printf("Successful sort\n");
         }
     else
         printf("Try again!\n");
-    printf("Successful sort\n");
     return students;
 
 }
@@ -315,6 +319,7 @@ struct Student* sort_student_decrease(int b , struct Student students[b] , char 
                 }
             }
         }
+        printf("Successful sort\n");
     }
     else if (strcasecmp(word,"group number")==0) {
         for (int i=0;i<b-1;i++) {
@@ -326,6 +331,7 @@ struct Student* sort_student_decrease(int b , struct Student students[b] , char 
                 }
             }
         }
+        printf("Successful sort\n");
     }
     else if (strcasecmp(word,"age")==0) {
         for (int i=0;i<b-1;i++) {
@@ -337,6 +343,7 @@ struct Student* sort_student_decrease(int b , struct Student students[b] , char 
                 }
             }
         }
+        printf("Successful sort\n");
     }
     else if (strcasecmp(word,"average score")==0) {
         for (int i=0;i<b-1;i++) {
@@ -348,6 +355,7 @@ struct Student* sort_student_decrease(int b , struct Student students[b] , char 
                 }
             }
         }
+        printf("Successful sort\n");
     }
     else if (strcasecmp(word,"gender")==0) {
             for (int i=0;i<b-1;i++) {
@@ -359,10 +367,10 @@ struct Student* sort_student_decrease(int b , struct Student students[b] , char 
                     }
                 }
             }
+        printf("Successful sort\n");
         }
     else
         printf("Try again!\n");
-    printf("Successful sort\n");
     return students;
 }
 struct Student* insert_students(int b , struct Student students[b] , int index ) {

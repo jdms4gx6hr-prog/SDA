@@ -392,6 +392,10 @@ struct Student* insert_students(int b , struct Student students[b] , int index )
     for (int i=0;i<index;i++) {
         temp3[i]=students[i];
     }
+    if (index<0 || index>=b) {
+        printf("Wrong index!\n");
+        return students;
+    }
     printf("Name:");
     fgets(temp3[index].name , 50,stdin);
     temp3[index].name[strcspn( temp3[index].name,"\n")] = '\0';

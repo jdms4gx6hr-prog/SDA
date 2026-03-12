@@ -413,6 +413,7 @@ struct Student* insert_students(int b , struct Student students[b] , int index )
         temp3[i+1]=students[i];
     }
     printf("Successful insert!\n");
+    free(students);
     return temp3;
 }
 struct Student* delete_student(int b , struct Student students[b] , int index) {

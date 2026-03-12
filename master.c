@@ -382,6 +382,10 @@ struct Student* insert_students(int b , struct Student students[b] , int index )
         printf("Array is empty\n");
         return students;
     }
+    if (index<0 || index>=b) {
+        printf("Wrong index!\n");
+        return students;
+    }
     printf("Enter student to add : \n");
     getchar();
     struct Student *temp3 = calloc((b+1) , sizeof(*temp3));
@@ -391,10 +395,6 @@ struct Student* insert_students(int b , struct Student students[b] , int index )
     }
     for (int i=0;i<index;i++) {
         temp3[i]=students[i];
-    }
-    if (index<0 || index>=b) {
-        printf("Wrong index!\n");
-        return students;
     }
     printf("Name:");
     fgets(temp3[index].name , 50,stdin);

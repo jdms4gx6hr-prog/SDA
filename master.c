@@ -562,7 +562,7 @@ int main() {
     struct Student *students = calloc(n , sizeof(*students));
     while (1) {
         int choice;
-        printf("Choose 1-15 to:\n"
+        printf("Choose 1-16 to:\n"
                "1.Add students\n"
                "2.Show students\n"
                "3.Change\n"
@@ -577,7 +577,8 @@ int main() {
                "12.Delete student\n"
                "13.Save into a file\n"
                "14.Read from a file\n"
-               "15.Exit\n");
+               "15.Save current state for ending program\n"
+               "16.Exit\n");
         scanf("%d" ,&choice);
         switch (choice){
             case 1: {
@@ -705,9 +706,19 @@ int main() {
                 show_students(n , students);
                 break;
             }
+            case 15: {
+                if (n>0 && students!=NULL) {
+                    savetofile(n,students);
+                    printf("Current student list is saved!\n");
+                }
+                else
+                    printf("Nothing to save!");
+                free(students);
+                exit(0);
+            }
 
         }
-        if (choice == 15)
+        if (choice == 16)
             break;
     }
     return 0;

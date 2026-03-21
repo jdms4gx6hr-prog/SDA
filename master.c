@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 struct Student {
     char name[50] , gender[10];
     int group_num , age;
@@ -444,6 +445,19 @@ struct Student* delete_student(int b , struct Student students[b] , int index) {
     free(students);
     return temp4;
 }
+int savetofile(int b , struct Student students[b]) {
+    FILE *f = fopen("students.txt" , "w");
+    if (f==NULL) {
+        printf("Memory allocation is failed!\n");
+        return 1;
+    }
+    for (int i=0;i<b;i++) {
+        fprintf(f,"%-40s| %-14d| %-8d| %-13.2f| %-10s|\n",
+            students[i].name,students[i].group_num,students[i].age,students[i].avg,students[i].gender);
+    }
+    fclose(f);
+    return 0;
+    }
 int main() {
     int n;
     printf("How many students to add?: ");
@@ -465,7 +479,8 @@ int main() {
                "10.Sort students in descending order\n"
                "11.Insert student\n"
                "12.Delete student\n"
-               "13.Exit\n");
+               "13.Save into a file\n"
+               "14.Exit\n");
         scanf("%d" ,&choice);
         switch (choice){
             case 1: {
@@ -568,8 +583,16 @@ int main() {
                 n-=1;
                 show_students(n,students);
             }
+            case 13: {
+                if (savetofile(n,students)!=0)
+                    printf("Your file was not saved!Try again!\n");
+                else
+                    printf("Your file was saved!\n");
+
+            }
+
         }
-        if (choice == 13)
+        if (choice == 14)
             break;
     }
     return 0;

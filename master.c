@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 struct Student {
     char name[50] , gender[10];
     int group_num , age;
@@ -444,6 +445,115 @@ struct Student* delete_student(int b , struct Student students[b] , int index) {
     free(students);
     return temp4;
 }
+int savetofile(int b , struct Student students[b]) {
+    FILE *f = fopen("students.txt" , "w");
+    if (f==NULL) {
+        printf("Memory allocation is failed!\n");
+        return 1;
+    }
+    for (int i=0;i<b;i++) {
+        fprintf(f,"%-3d| %-40s| %-14d| %-8d| %-13.2f| %-10s|\n",
+            i+1,students[i].name,students[i].group_num,students[i].age,students[i].avg,students[i].gender);
+    }
+    fclose(f);
+    return 0;
+    }
+void trim(char *str) {
+    if (str == NULL)
+        return;
+
+    while (isspace((unsigned char)*str)) {
+        str++;
+    }
+    char *end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char)*end)) {
+        end--;
+    }
+    *(end + 1) = '\0';
+}
+struct Student* loadFromFile(const char *filename, int *n) {
+    FILE *f = fopen(filename, "r");
+    if (f == NULL) {
+        printf("Can not open your file!\n");
+        return NULL;
+    }
+
+    char buffer[256];
+    *n = 0;
+    while (fgets(buffer, sizeof(buffer), f)) {
+        (*n)++;
+    }
+
+    if (*n == 0) {
+        fclose(f);
+        return NULL;
+    }
+
+    struct Student *students = calloc(*n, sizeof(struct Student));
+    if (students == NULL) {
+        printf("Memory allocation is failed!\n");
+        fclose(f);
+        return NULL;
+    }
+
+    rewind(f);
+
+    for (int i = 0; i < *n; i++) {
+        if (fgets(buffer, sizeof(buffer), f) == NULL) {
+            break;
+        }
+
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        if (strlen(buffer) <= 1) {
+            i--;
+            continue;
+        }
+        char *token;
+        char *saveptr;
+        token = strtok_r(buffer, "|", &saveptr);
+        token = strtok_r(NULL, "|", &saveptr);
+        if (token) {
+            trim(token);
+            strncpy(students[i].name, token, sizeof(students[i].name) - 1);
+            students[i].name[sizeof(students[i].name) - 1] = '\0';
+        } else {
+            students[i].name[0] = '\0';
+        }
+        token = strtok_r(NULL, "|", &saveptr);
+        if (token) {
+            trim(token);
+            students[i].group_num = atoi(token);
+        } else {
+            students[i].group_num = 0;
+        }
+        token = strtok_r(NULL, "|", &saveptr);
+        if (token) {
+            trim(token);
+            students[i].age = atoi(token);
+        } else {
+            students[i].age = 0;
+        }
+        token = strtok_r(NULL, "|", &saveptr);
+        if (token) {
+            trim(token);
+            students[i].avg = atof(token);
+        } else {
+            students[i].avg = 0.0;
+        }
+        token = strtok_r(NULL, "|", &saveptr);
+        if (token) {
+            trim(token);
+            strncpy(students[i].gender, token, sizeof(students[i].gender) - 1);
+            students[i].gender[sizeof(students[i].gender) - 1] = '\0';
+        } else {
+            students[i].gender[0] = '\0';
+        }
+    }
+
+    fclose(f);
+    return students;
+}
 int main() {
     int n;
     printf("How many students to add?: ");
@@ -452,7 +562,7 @@ int main() {
     struct Student *students = calloc(n , sizeof(*students));
     while (1) {
         int choice;
-        printf("Choose 1-13 to:\n"
+        printf("Choose 1-16 to:\n"
                "1.Add students\n"
                "2.Show students\n"
                "3.Change\n"
@@ -465,7 +575,10 @@ int main() {
                "10.Sort students in descending order\n"
                "11.Insert student\n"
                "12.Delete student\n"
-               "13.Exit\n");
+               "13.Save into a file\n"
+               "14.Read from a file\n"
+               "15.Save current state for ending program\n"
+               "16.Exit\n");
         scanf("%d" ,&choice);
         switch (choice){
             case 1: {
@@ -567,9 +680,45 @@ int main() {
                 students = delete_student(n,students,index1-1);
                 n-=1;
                 show_students(n,students);
+                break;
             }
+            case 13: {
+                if (savetofile(n,students)!=0)
+                    printf("Your file was not saved!Try again!\n");
+                else
+                    printf("Your file was saved!\n");
+                break;
+            }
+            case 14: {
+                char filename[100];
+                printf("Enter the name of your file:");
+                getchar();
+                fgets(filename , 100,stdin);
+                filename[strcspn(filename,"\n")] = '\0';
+                struct Student *loaded_students = loadFromFile(filename,&n);
+                if (loaded_students==NULL) {
+                    printf("Error\n");
+                    break;
+                }
+                free(students);
+                students = loaded_students;
+                printf("There are %d students\n" , n);
+                show_students(n , students);
+                break;
+            }
+            case 15: {
+                if (n>0 && students!=NULL) {
+                    savetofile(n,students);
+                    printf("Current student list is saved!\n");
+                }
+                else
+                    printf("Nothing to save!");
+                free(students);
+                exit(0);
+            }
+
         }
-        if (choice == 13)
+        if (choice == 16)
             break;
     }
     return 0;

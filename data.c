@@ -152,3 +152,399 @@ void show_students (int b , struct Student students[b]) {
         );
     }
 }
+void change_struct(int k ,char ch[15], int b , struct Student students[b]) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return;
+    }
+    if (b <= 0) {
+        printf("No students to change\n");
+        return;
+    }
+    if (k<0 || k>=b) {
+        printf("Wrong index!\n");
+        return;
+    }
+    int num,gr;
+    float av;
+    if (strcmp(ch,"name")==0){
+        printf("Enter new name:");
+        fgets(students[k].name,50,stdin);
+        students[k].name[strcspn(  students[k].name,"\n")]='\0';
+    }
+    else if (strcmp(ch,"group number")==0) {
+        printf("Enter new group number:");
+        scanf("%d" , &gr);
+        students[k].group_num = gr;
+    }
+    else if (strcmp(ch,"age")==0) {
+        printf("Enter new age:");
+        scanf("%d" , &num);
+        students[k].age = num;
+    }
+    else if (strcmp(ch,"average score")==0) {
+        printf("Enter new average score:");
+        scanf("%f" , &av);
+        students[k].avg = av;
+    }
+    else if (strcmp(ch,"gender")==0) {
+        printf("Enter new gender:");
+        fgets(students[k].gender,10,stdin);
+        students[k].gender[strcspn(  students[k].gender,"\n")]='\0';
+    }
+    else
+        printf("Try again!\n");
+}
+void search_struct(char word[15],int b , struct Student students[b]){
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return;
+    }
+    if (b <= 0) {
+        printf("No students to search\n");
+        return;
+    }
+    if (strcasecmp(word,"name")==0){
+        for (int i=0;i<b;i++)
+            printf("%s\n" , students[i].name);
+    }
+    else if (strcasecmp(word,"group number")==0) {
+        for (int i=0;i<b;i++)
+            printf("%d\n" , students[i].group_num);
+    }
+    else if (strcasecmp(word,"age")==0) {
+        for (int i=0;i<b;i++)
+            printf("%d\n" , students[i].age);
+    }
+    else if (strcasecmp(word,"average score")==0) {
+        for (int i=0;i<b;i++)
+            printf("%.2f\n" , students[i].avg);
+    }
+    else if (strcasecmp(word,"gender")==0) {
+        for (int i=0;i<b;i++)
+            printf("%s\n" , students[i].gender);
+    }
+    else
+        printf("Try again!\n");
+}
+struct Student* extend_array(int n , int b , struct Student students[b] ) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return NULL ;
+    }
+    if (n<0)
+        return students;
+    printf("Enter new students:\n");
+    struct Student *temp = calloc((b+n) , sizeof(*temp));
+    if (temp == NULL) {
+        printf("Array is NULL\n");
+        return students ;
+    }
+    getchar();
+    for (int i=0 ; i<(b+n);i++) {
+        if (i<b)
+            temp[i]=students[i];
+        else{
+            printf("Name:");
+            fgets(temp[i].name , 50,stdin);
+            temp[i].name[strcspn( temp[i].name,"\n")] = '\0';
+            printf("Group Number:");
+            scanf("%d" , &temp[i].group_num);
+            printf("Age:");
+            scanf("%d" , &temp[i].age);
+            printf("Average score:");
+            scanf("%f" , &temp[i].avg);
+            printf("Gender:");
+            getchar();
+            fgets(temp[i].gender , 10,stdin);
+            temp[i].gender[strcspn( temp[i].gender,"\n")] = '\0';
+        }
+    }
+    free(students);
+    return temp;
+}
+struct Student* append_array(int b , struct Student students[b]) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return NULL;
+    }
+    printf("Enter student to add to the end: \n");
+    getchar();
+    struct Student *temp1 = calloc((b+1) , sizeof(*temp1));
+    if (temp1==NULL) {
+        printf("Memory allocation is failed\n");
+        return students;
+    }
+    for (int i=0;i<(b+1);i++) {
+        if (i<b)
+            temp1[i]=students[i];
+        else {
+            printf("Name:");
+            fgets(temp1[i].name , 50,stdin);
+            temp1[i].name[strcspn( temp1[i].name,"\n")] = '\0';
+            printf("Group Number:");
+            scanf("%d" , &temp1[i].group_num);
+            printf("Age:");
+            scanf("%d" , &temp1[i].age);
+            printf("Average score:");
+            scanf("%f" , &temp1[i].avg);
+            printf("Gender:");
+            getchar();
+            fgets(temp1[i].gender , 10,stdin);
+            temp1[i].gender[strcspn( temp1[i].gender,"\n")] = '\0';
+        }
+    }
+    free(students);
+    return temp1;
+}
+struct Student* delete_last(int b , struct Student students[b]) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return NULL;
+    }
+    if (b<=0) {
+        printf("No students to delete");
+        return students;
+    }
+    if (b == 1) {
+        free(students);
+        printf("Last student deleted. Array is now empty.\n");
+        return NULL;
+    }
+    printf("Deleting last student: \n");
+    struct Student *temp2 = calloc((b-1) ,sizeof(*temp2));
+    if (temp2==NULL) {
+        printf("Memory allocation is failed\n");
+        return students;
+    }
+    for (int i=0 ; i<(b-1) ; i++)
+        temp2[i] = students[i];
+    printf("Successful delete!\n");
+    free(students);
+    return temp2;
+
+}
+void free_struct(int b , struct Student students[b]) {
+    if (students!=NULL){
+        free(students);
+        printf("Successful cleaning\n");
+    }
+}
+struct Student* sort_student_increase(int b , struct Student students[b] , char word[50]) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return NULL;
+    }
+    if (b <= 0) {
+        printf("Array is empty\n");
+        return students;
+    }
+    if (strcasecmp(word,"name")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (strcmp(students[j].name,students[j+1].name)>0) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+        printf("Successful sort\n");
+    }
+    else if (strcasecmp(word,"group number")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (students[j].group_num>students[j+1].group_num) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+        printf("Successful sort\n");
+    }
+    else if (strcasecmp(word,"age")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (students[j].age>students[j+1].age) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+        printf("Successful sort\n");
+    }
+    else if (strcasecmp(word,"average score")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (students[j].avg>students[j+1].avg) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+        printf("Successful sort\n");
+    }
+    else if (strcasecmp(word,"gender")==0) {
+            for (int i=0;i<b-1;i++) {
+                for (int j=0 ;j< b-i-1;j++) {
+                    if (strcmp(students[j].gender,students[j+1].gender)>0) {
+                        struct Student temp =students[j];
+                        students[j] = students[j+1];
+                        students[j+1] = temp;
+                    }
+                }
+            }
+        printf("Successful sort\n");
+        }
+    else
+        printf("Try again!\n");
+    return students;
+
+}
+struct Student* sort_student_decrease(int b , struct Student students[b] , char word[50]) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return NULL;
+    }
+    if (b <= 0) {
+        printf("Array is empty\n");
+        return students;
+    }
+    if (strcasecmp(word,"name")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (strcmp(students[j].name,students[j+1].name)<0) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+        printf("Successful sort\n");
+    }
+    else if (strcasecmp(word,"group number")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (students[j].group_num<students[j+1].group_num) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+        printf("Successful sort\n");
+    }
+    else if (strcasecmp(word,"age")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (students[j].age<students[j+1].age) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+        printf("Successful sort\n");
+    }
+    else if (strcasecmp(word,"average score")==0) {
+        for (int i=0;i<b-1;i++) {
+            for (int j=0 ;j< b-i-1;j++) {
+                if (students[j].avg<students[j+1].avg) {
+                    struct Student temp =students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+        printf("Successful sort\n");
+    }
+    else if (strcasecmp(word,"gender")==0) {
+            for (int i=0;i<b-1;i++) {
+                for (int j=0 ;j< b-i-1;j++) {
+                    if (strcmp(students[j].gender,students[j+1].gender)<0) {
+                        struct Student temp =students[j];
+                        students[j] = students[j+1];
+                        students[j+1] = temp;
+                    }
+                }
+            }
+        printf("Successful sort\n");
+        }
+    else
+        printf("Try again!\n");
+    return students;
+}
+struct Student* insert_students(int b , struct Student students[b] , int index ) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return NULL;
+    }
+    if (b <= 0) {
+        printf("Array is empty\n");
+        return students;
+    }
+    if (index<0 || index>=b) {
+        printf("Wrong index!\n");
+        return students;
+    }
+    printf("Enter student to add : \n");
+    getchar();
+    struct Student *temp3 = calloc((b+1) , sizeof(*temp3));
+    if (temp3==NULL) {
+        printf("Memory allocation is failed\n");
+        return students;
+    }
+    for (int i=0;i<index;i++) {
+        temp3[i]=students[i];
+    }
+    printf("Name:");
+    fgets(temp3[index].name , 50,stdin);
+    temp3[index].name[strcspn( temp3[index].name,"\n")] = '\0';
+    printf("Group Number:");
+    scanf("%d" , &temp3[index].group_num);
+    printf("Age:");
+    scanf("%d" , &temp3[index].age);
+    printf("Average score:");
+    scanf("%f" , &temp3[index].avg);
+    printf("Gender:");
+    getchar();
+    fgets(temp3[index].gender , 10,stdin);
+    temp3[index].gender[strcspn( temp3[index].gender,"\n")] = '\0';
+    for (int i=index;i<b;i++) {
+        temp3[i+1]=students[i];
+    }
+    printf("Successful insert!\n");
+    free(students);
+    return temp3;
+}
+struct Student* delete_student(int b , struct Student students[b] , int index) {
+    if (students == NULL) {
+        printf("Array is NULL\n");
+        return NULL;
+    }
+    if (b <= 0) {
+        printf("Array is empty\n");
+        return students;
+    }
+    if (index<0 || index>=b) {
+        printf("Wrong index!\n");
+        return students;
+    }
+    struct Student *temp4 = calloc((b-1) , sizeof(*temp4));
+    if (temp4==NULL) {
+        printf("Memory allocation is failed!\n");
+        return students;
+    }
+    for (int i=0;i<index;i++) {
+        temp4[i] = students[i];
+    }
+    for (int i=(index+1);i<b;i++) {
+        temp4[i-1] = students[i];
+    }
+    printf("Successful delete!\n");
+    free(students);
+    return temp4;
+}

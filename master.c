@@ -555,7 +555,6 @@ struct Student* loadFromFile(const char *filename, int *n) {
     return students;
 }
 int main() {
-    printf("Running master");
     int n;
     printf("How many students to add?: ");
     scanf("%d" , &n);

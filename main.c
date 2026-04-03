@@ -5,7 +5,6 @@
 #include "data.h"
 
 int main() {
-    printf("Running main");
     int n;
     printf("How many students to add?: ");
     scanf("%d" , &n);
